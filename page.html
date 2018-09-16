@@ -6,91 +6,81 @@
   <link rel="stylesheet" href="cal.css">
   <title>Budget Planner</title>
 </head>
-<body>
-  
+
+<body onload="functionDisable()">
  <div class="mainContainer">
     <h1>Budget Planner</h1>
   <div class="finalBudget">
-    TotalBudget <input label="totalBudget" class="totalBudget" id="totalBudget" type="number" value="0"  disabled />
-    Expenses <input label="expenses" class="expenses" id="expenses" type="number" disabled />
-    Savings <input label="savings" class="savings" id="savings" type="number" disabled />
-
+    TotalBudget <input label="totalBudget" class="totalBudget" id="totalBudget" type="number" value="0" />
+    Expenses <input label="expenses" class="expenses" id="expenses" type="number" />
+    Savings <input label="savings" class="savings" id="savings" type="number" />
   </div>
 
-   <div class="tracker">
-
-Select the type <select id="expenseorsaving">
-   <option value="expense">Expense</option>
-   <option value="saving">Saving</option>
- </select>
-
-
-     <input label="expensesEntered" id="enteredAmount">
-
-      <input type="submit" name="commit" value="Submit" onclick="calcBudget1();" />
+  <div class="tracker">
+    Select the type 
+    <select id="expenseorsaving">
+      <option value="expense">Expense</option>
+      <option value="saving">Saving</option>
+    </select>
   
-      <div class="recordOfItems">
-        <span class="listOfSavings">
-          <ul id="savingList">
-            SavingList
-            </ul>
-        </span>
+    <input label="expensesEntered" id="enteredAmount">
+    <input type="submit" name="commit" value="Submit" onclick="calcBudget1();" />
+  </div>
+      
+  <div class="recordOfItems">
+    <span class="listOfSavings">
+      <ul id="savingList">
+        SavingList
+      </ul>
+    </span>
    
-        <span class="listOfExpenses">
-          <ul id="expenseList">
-            Expense List
-          </ul>
-        </span>
-
-   </div>
+    <span class="listOfExpenses">
+      <ul id="expenseList">
+        Expense List
+      </ul>
+    </span>
+  </div>
 
   </div>
+
+
 
      <script>
+       function functionDisable(){
+          document.getElementById("totalBudget").readOnly = true;
+          document.getElementById("expenses").readOnly = true;
+          document.getElementById("savings").readOnly = true;
+         }
+       
 
      function calcBudget1() {
 
        var savingsSelected = document.getElementById('expenseorsaving').value;
        var totalBudgetAmount = document.getElementById('totalBudget');
-       var enteredAmountByUser = document.getElementById('enteredAmount').value;
+       var enteredAmountByUser = parseFloat(document.getElementById('enteredAmount').value);
        var expensesEntered = document.getElementById('expenses');
        var savingsEntered = document.getElementById('savings');
-       var enteredAmountByUserValue = parseFloat(enteredAmountByUser);
-       var expenseListItemsOnPage = document.getElementById("expenselistitems");
-       var savingListItemsOnPage = document.getElementById("savinglistitems");
+       var parsedAmount = parseFloat(totalBudgetAmount.value);
 
+      function calculateBudget(type,amount,listId){
+        type.value = amount;
+        var totalBudgetAmountValue = parsedAmount + amount;
+        totalBudgetAmount.value=totalBudgetAmountValue;
+        var ul = document.getElementById(listId);
+        var li = document.createElement("li");
+        li.appendChild(document.createTextNode(enteredAmountByUser));
+        ul.appendChild(li);
+  
+      }
        if(savingsSelected === "expense")
        {
-         expensesEntered.value = enteredAmountByUserValue;
-        totalBudgetAmount.value -= enteredAmountByUserValue;
-        savingsEntered.value = "";
-        expenseListItemsOnPage = enteredAmountByUserValue ;
-
-        var ul = document.getElementById("expenseList");
-        var li = document.createElement("li");
-          li.appendChild(document.createTextNode("Expense"));
-          li.innerHTML = enteredAmountByUserValue;
-          ul.appendChild(li);
+         calculateBudget(expensesEntered, -1*enteredAmountByUser, "expenseList");
        }
    
     else
       {
-        savingsEntered.value = enteredAmountByUserValue;
-        var parsedAmount = parseFloat(totalBudgetAmount.value);
-        totalBudgetAmount.value = enteredAmountByUserValue + parsedAmount;
-        expensesEntered.value="";
-        savingListItemsOnPage = enteredAmountByUserValue ;
-
-        savingListItemsOnPage.innerHTML = enteredAmountByUserValue;
-
-        var ul = document.getElementById("savingList");
-        var li = document.createElement("li");
-          li.appendChild(document.createTextNode("Savings"));
-          li.innerHTML = enteredAmountByUserValue;
-          ul.appendChild(li);
-       }
-
-
+        calculateBudget(savingsEntered, enteredAmountByUser, "savingList");
+      }
 }
      </script>
 </body>
