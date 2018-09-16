@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="cal.css">
+  <title>Budget Planner</title>
+</head>
+<body>
+  
+ <div class="mainContainer">
+    <h1>Budget Planner</h1>
+  <div class="finalBudget">
+    TotalBudget <input label="totalBudget" class="totalBudget" id="totalBudget" type="number" value="0"  disabled />
+    Expenses <input label="expenses" class="expenses" id="expenses" type="number" disabled />
+    Savings <input label="savings" class="savings" id="savings" type="number" disabled />
+
+  </div>
+
+   <div class="tracker">
+
+Select the type <select id="expenseorsaving">
+   <option value="expense">Expense</option>
+   <option value="saving">Saving</option>
+ </select>
+
+
+     <input label="expensesEntered" id="enteredAmount">
+
+      <input type="submit" name="commit" value="Submit" onclick="calcBudget1();" />
+  
+      <div class="recordOfItems">
+        <span class="listOfSavings">
+          <ul id="savingList">
+            SavingList
+            </ul>
+        </span>
+   
+        <span class="listOfExpenses">
+          <ul id="expenseList">
+            Expense List
+          </ul>
+        </span>
+
+   </div>
+
+  </div>
+
+     <script>
+
+     function calcBudget1() {
+
+       var savingsSelected = document.getElementById('expenseorsaving').value;
+       var totalBudgetAmount = document.getElementById('totalBudget');
+       var enteredAmountByUser = document.getElementById('enteredAmount').value;
+       var expensesEntered = document.getElementById('expenses');
+       var savingsEntered = document.getElementById('savings');
+       var enteredAmountByUserValue = parseFloat(enteredAmountByUser);
+       var expenseListItemsOnPage = document.getElementById("expenselistitems");
+       var savingListItemsOnPage = document.getElementById("savinglistitems");
+
+       if(savingsSelected === "expense")
+       {
+         expensesEntered.value = enteredAmountByUserValue;
+        totalBudgetAmount.value -= enteredAmountByUserValue;
+        savingsEntered.value = "";
+        expenseListItemsOnPage = enteredAmountByUserValue ;
+
+        var ul = document.getElementById("expenseList");
+        var li = document.createElement("li");
+          li.appendChild(document.createTextNode("Expense"));
+          li.innerHTML = enteredAmountByUserValue;
+          ul.appendChild(li);
+       }
+   
+    else
+      {
+        savingsEntered.value = enteredAmountByUserValue;
+        var parsedAmount = parseFloat(totalBudgetAmount.value);
+        totalBudgetAmount.value = enteredAmountByUserValue + parsedAmount;
+        expensesEntered.value="";
+        savingListItemsOnPage = enteredAmountByUserValue ;
+
+        savingListItemsOnPage.innerHTML = enteredAmountByUserValue;
+
+        var ul = document.getElementById("savingList");
+        var li = document.createElement("li");
+          li.appendChild(document.createTextNode("Savings"));
+          li.innerHTML = enteredAmountByUserValue;
+          ul.appendChild(li);
+       }
+
+
+}
+     </script>
+</body>
+</html>
